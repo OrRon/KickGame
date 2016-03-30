@@ -8,6 +8,7 @@
 
 import SpriteKit
 import GameKit
+import Darwin
 class GameScene: SKScene {
     var ball:SKSpriteNode!
     var cross:SKSpriteNode!
@@ -33,6 +34,7 @@ class GameScene: SKScene {
         
         cross = SKSpriteNode(imageNamed: "cross")
         cross.position = CGPoint(x: startingPoint, y: 25)
+        cross.runAction(SKAction.repeatActionForever(SKAction.rotateByAngle(CGFloat(-M_PI*2), duration: 2)))
         self.addChild(cross)
         
         ball = SKSpriteNode(imageNamed: "Ball")
@@ -52,6 +54,7 @@ class GameScene: SKScene {
             self.removeAllChildren()
             self.setUpScene()
             self.paused = false
+            self.score = 0
             return
         }
         ball.physicsBody?.dynamic = true
@@ -73,6 +76,8 @@ class GameScene: SKScene {
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         cross.position.y = ball.position.y
+        cross.xScale = 1 + CGFloat(SDistanceBetweenPoints(cross.position, second: ball.position) * 0.001 )
+        cross.yScale = 1 + CGFloat(SDistanceBetweenPoints(cross.position, second: ball.position) * 0.001 )
     }
 }
 
